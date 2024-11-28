@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Efficy.Application.Counters.Commands.DeleteCounter;
 
-public record DeleteCounterCommand(int Id) : IRequest;
+public record DeleteCounterCommand(int CounterId) : IRequest;
 
 public class DeleteCounterCommandHandler : IRequestHandler<DeleteCounterCommand>
 {
@@ -17,10 +17,10 @@ public class DeleteCounterCommandHandler : IRequestHandler<DeleteCounterCommand>
 
     public async Task Handle(DeleteCounterCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _dbContext.Counters.FindAsync(request.Id, cancellationToken);
+        var entity = await _dbContext.Counters.FindAsync(request.CounterId, cancellationToken);
             
         if (entity == null)
-            throw new NotFoundException(request.Id.ToString());
+            throw new NotFoundException(request.CounterId.ToString());
 
         _dbContext.Counters.Remove(entity);
 

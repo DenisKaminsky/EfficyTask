@@ -4,7 +4,7 @@ using Efficy.Domain.Exceptions;
 
 namespace Efficy.Application.Counters.Commands.IncrementCounter
 {
-    public record IncrementCounterCommand(int Id, int IncrementValue) : IRequest<int>;
+    public record IncrementCounterCommand(int CounterId, int IncrementValue) : IRequest<int>;
 
     public class IncrementCounterCommandHandler : IRequestHandler<IncrementCounterCommand, int>
     {
@@ -17,9 +17,9 @@ namespace Efficy.Application.Counters.Commands.IncrementCounter
 
         public async Task<int> Handle(IncrementCounterCommand request, CancellationToken cancellationToken)
         {
-            var entity = await _dbContext.Counters.FindAsync(request.Id, cancellationToken);
+            var entity = await _dbContext.Counters.FindAsync(request.CounterId, cancellationToken);
             if (entity == null)
-                throw new NotFoundException(request.Id.ToString());
+                throw new NotFoundException(request.CounterId.ToString());
 
             entity.Value += request.IncrementValue;
 

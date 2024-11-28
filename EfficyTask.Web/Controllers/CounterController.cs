@@ -21,7 +21,7 @@ namespace EfficyTask.Web.Controllers
 
         [HttpGet("team/{teamId}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<CounterForTeamDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllCountersForTeam(int teamId)
         {
             var countersForTeam = await _sender.Send(new GetAllCountersForTeamQuery(teamId));
@@ -29,7 +29,8 @@ namespace EfficyTask.Web.Controllers
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(CounterDto), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetById(int id)
         {
             var counter = await _sender.Send(new GetCounterByIdQuery(id));
@@ -38,7 +39,7 @@ namespace EfficyTask.Web.Controllers
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
         public async Task<IActionResult> CreateCounter(CreateCounterCommand request)
         {
             var id = await _sender.Send(request);
@@ -48,19 +49,19 @@ namespace EfficyTask.Web.Controllers
         [HttpPut("increment")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
         public async Task<IActionResult> IncrementCounter(IncrementCounterCommand request)
         {
             var newValue = await _sender.Send(request);
             return Ok(newValue);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{counterId}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> DeleteCounter(int id)
+        public async Task<IActionResult> DeleteCounter(int counterId)
         {
-            await _sender.Send(new DeleteCounterCommand(id));
+            await _sender.Send(new DeleteCounterCommand(counterId));
             return NoContent();
         }
     }

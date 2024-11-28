@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Efficy.Application.Teams.Commands.DeleteTeam;
 
-public record DeleteTeamCommand(int Id) : IRequest;
+public record DeleteTeamCommand(int TeamId) : IRequest;
 
 public class DeleteTeamCommandHandler : IRequestHandler<DeleteTeamCommand>
 {
@@ -17,9 +17,9 @@ public class DeleteTeamCommandHandler : IRequestHandler<DeleteTeamCommand>
 
     public async Task Handle(DeleteTeamCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _dbContext.Teams.FindAsync(request.Id, cancellationToken);
+        var entity = await _dbContext.Teams.FindAsync(request.TeamId, cancellationToken);
         if (entity == null)
-            throw new NotFoundException(request.Id.ToString());
+            throw new NotFoundException(request.TeamId.ToString());
 
         _dbContext.Teams.Remove(entity);
 
