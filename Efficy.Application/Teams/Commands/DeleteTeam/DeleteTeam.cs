@@ -4,6 +4,10 @@ using MediatR;
 
 namespace Efficy.Application.Teams.Commands.DeleteTeam;
 
+/// <summary>
+/// Represents a request to delete the Team
+/// </summary>
+/// <param name="TeamId">Id of the Team to delete</param>
 public record DeleteTeamCommand(int TeamId) : IRequest;
 
 public class DeleteTeamCommandHandler : IRequestHandler<DeleteTeamCommand>

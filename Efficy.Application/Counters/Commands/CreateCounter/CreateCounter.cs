@@ -4,6 +4,11 @@ using MediatR;
 
 namespace Efficy.Application.Counters.Commands.CreateCounter;
 
+/// <summary>
+/// Represents a request to create a Counter
+/// </summary>
+/// <param name="TeamId">Id of the Team to which the Counter will be added</param>
+/// <param name="Name">Name of the Counter. Must be unique within the Team</param>
 public record CreateCounterCommand(int TeamId, string Name) : IRequest<int>;
 
 public class CreateCounterCommandHandler : IRequestHandler<CreateCounterCommand, int>

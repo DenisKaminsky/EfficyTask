@@ -4,6 +4,11 @@ using Efficy.Domain.Exceptions;
 
 namespace Efficy.Application.Counters.Commands.IncrementCounter
 {
+    /// <summary>
+    /// Represents a request to increment the Counter
+    /// </summary>
+    /// <param name="CounterId">Id of the Counter we want to update</param>
+    /// <param name="IncrementValue">Value by which we want to increment the counter. Must be in the range from 1 to 100 inclusive</param>
     public record IncrementCounterCommand(int CounterId, int IncrementValue) : IRequest<int>;
 
     public class IncrementCounterCommandHandler : IRequestHandler<IncrementCounterCommand, int>

@@ -19,7 +19,11 @@ public class TeamsController : ControllerBase
     {
         _sender = sender;
     }
-    
+
+    /// <summary>
+    /// Lists all Teams
+    /// </summary>
+    /// <response code="200">Contains List of Teams</response>
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<TeamDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAllTeams()
@@ -28,6 +32,13 @@ public class TeamsController : ControllerBase
         return Ok(teams);
     }
 
+    /// <summary>
+    /// Lists all Teams and their total step counts
+    /// </summary>
+    /// <remarks>
+    /// You can use this endpoint to compare one team with others
+    /// </remarks>
+    /// <response code="200">Contains List of Teams and their step counts</response>
     [HttpGet("steps")]
     [ProducesResponseType(typeof(IEnumerable<TeamWithTotalStepsDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetTeamsTotalSteps()
@@ -36,6 +47,15 @@ public class TeamsController : ControllerBase
         return Ok(teams);
     }
 
+    /// <summary>
+    /// Gets information about specific Team and its total steps count
+    /// </summary>
+    /// <remarks>
+    /// You can use this endpoint to see how much specific team have walked in total
+    /// </remarks>
+    /// <param name="teamId">Id of the Team we want to get information for</param>
+    /// <response code="404">Team was not found</response>
+    /// <response code="200">Contains information about the Team including total steps count</response>
     [HttpGet("steps/{teamId}")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(TeamWithTotalStepsDto), StatusCodes.Status200OK)]
@@ -44,7 +64,12 @@ public class TeamsController : ControllerBase
         var team = await _sender.Send(new GetTeamTotalStepsQuery(teamId));
         return Ok(team);
     }
-    
+
+    /// <summary>
+    /// Creates a Team
+    /// </summary>
+    /// <response code="400">Input is invalid. Contains validation errors</response>
+    /// <response code="201">Contains the ID of the newly created Team</response>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
@@ -53,7 +78,13 @@ public class TeamsController : ControllerBase
         var teamId = await _sender.Send(request);
         return CreatedAtAction(nameof(GetTeamTotalSteps), new { id = teamId }, teamId);
     }
-    
+
+    /// <summary>
+    /// Deletes the Team and all its counters
+    /// </summary>
+    /// <param name="id">Id of the Team to delete</param>
+    /// <response code="404">Team was not found</response>
+    /// <response code="204">Team was successfully deleted</response>
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]

@@ -4,6 +4,10 @@ using MediatR;
 
 namespace Efficy.Application.Teams.Commands.CreateTeam;
 
+/// <summary>
+/// Represents a request to create a Team
+/// </summary>
+/// <param name="Title">Name of the Team. Should be Unique</param>
 public record CreateTeamCommand(string? Title) : IRequest<int>;
 
 public class CreateTeamCommandHandler : IRequestHandler<CreateTeamCommand, int>

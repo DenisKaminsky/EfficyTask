@@ -19,6 +19,15 @@ namespace EfficyTask.Web.Controllers
             _sender = sender;
         }
 
+        /// <summary>
+        /// Lists all counters for specific Team
+        /// </summary>
+        /// <remarks>
+        /// You can use this endpoint to see how much each team member have walked
+        /// </remarks>
+        /// <param name="teamId">Id of the Team we want to get counters for</param>
+        /// <response code="404">Team was not found</response>
+        /// <response code="200">Contains all counters for specific Team</response>
         [HttpGet("team/{teamId}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(IEnumerable<CounterForTeamDto>), StatusCodes.Status200OK)]
@@ -28,6 +37,12 @@ namespace EfficyTask.Web.Controllers
             return Ok(countersForTeam);
         }
 
+        /// <summary>
+        /// Gets information about specific counter
+        /// </summary>
+        /// <param name="id">Id of the Counter</param>
+        /// <response code="404">Counter was not found</response>
+        /// <response code="200">Contains information about the counter</response>
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(CounterDto), StatusCodes.Status200OK)]
@@ -37,6 +52,11 @@ namespace EfficyTask.Web.Controllers
             return Ok(counter);
         }
 
+        /// <summary>
+        /// Creates a Counter and assigns it to the specified Team
+        /// </summary>
+        /// <response code="400">Input is invalid. Contains validation errors</response>
+        /// <response code="201">Contains the ID of the newly created Counter</response>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
@@ -46,6 +66,15 @@ namespace EfficyTask.Web.Controllers
             return CreatedAtAction(nameof(GetById), new { id }, id);
         }
 
+        /// <summary>
+        /// Increments the value of the specified Counter
+        /// </summary>
+        /// <remarks>
+        /// You can use this endpoint to count steps for the Team the Counter belongs to
+        /// </remarks>
+        /// <response code="400">Input is invalid. Contains validation errors</response>
+        /// <response code="404">Counter was not found</response>
+        /// <response code="200">Contains the new value of the Counter</response>
         [HttpPut("increment")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -56,6 +85,12 @@ namespace EfficyTask.Web.Controllers
             return Ok(newValue);
         }
 
+        /// <summary>
+        /// Deletes the Counter
+        /// </summary>
+        /// <param name="counterId">Id of the Counter to delete</param>
+        /// <response code="404">Counter was not found</response>
+        /// <response code="204">Counter was successfully deleted</response>
         [HttpDelete("{counterId}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
