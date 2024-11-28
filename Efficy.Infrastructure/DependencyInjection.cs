@@ -17,6 +17,7 @@ public static class DependencyInjection
             options.UseSqlite(connectionString);
         });
         services.AddScoped<IAppDbContext>(provider => provider.GetRequiredService<AppDbContext>());
+        services.AddScoped<AppDbContextInitializer>();
 
         return services;
     }

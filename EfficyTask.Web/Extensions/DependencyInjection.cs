@@ -1,6 +1,6 @@
 using EfficyTask.Web.Settings;
 
-namespace EfficyTask.Web;
+namespace EfficyTask.Web.Extensions;
 
 public static class DependencyInjection
 {
@@ -9,7 +9,7 @@ public static class DependencyInjection
         services.AddControllers();
 
         services.AddExceptionHandler<GlobalExceptionHandler>();
-        
+
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();

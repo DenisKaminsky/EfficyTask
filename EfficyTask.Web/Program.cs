@@ -1,6 +1,6 @@
 using Efficy.Application;
 using Efficy.Infrastructure;
-using EfficyTask.Web;
+using EfficyTask.Web.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +14,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    await app.InitialiseDatabaseAsync();
     app.UseSwagger();
     app.UseSwaggerUI();
 }
