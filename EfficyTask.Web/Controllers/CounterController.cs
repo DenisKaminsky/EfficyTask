@@ -55,6 +55,12 @@ namespace EfficyTask.Web.Controllers
         /// <summary>
         /// Creates a Counter and assigns it to the specified Team
         /// </summary>
+        /// <remarks>
+        /// All the parameters in the request body are required.
+        /// 
+        /// **NOTE: Name must be unique within the Team**.
+        /// So you can have a counter with the same name in different Teams, **but not within the same Team**.
+        /// </remarks>
         /// <response code="400">Input is invalid. Contains validation errors</response>
         /// <response code="201">Contains the ID of the newly created Counter</response>
         [HttpPost]
@@ -70,7 +76,11 @@ namespace EfficyTask.Web.Controllers
         /// Increments the value of the specified Counter
         /// </summary>
         /// <remarks>
-        /// You can use this endpoint to count steps for the Team the Counter belongs to
+        /// You can use this endpoint to count steps for the Team the Counter belongs to.
+        ///
+        /// All the parameters in the request body are required.
+        ///
+        /// **NOTE:** 'IncrementValue' must be in the range from 1 to 100 inclusive.
         /// </remarks>
         /// <response code="400">Input is invalid. Contains validation errors</response>
         /// <response code="404">Counter was not found</response>

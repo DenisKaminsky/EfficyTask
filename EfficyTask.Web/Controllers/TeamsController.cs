@@ -68,6 +68,11 @@ public class TeamsController : ControllerBase
     /// <summary>
     /// Creates a Team
     /// </summary>
+    /// <remarks>
+    /// All the parameters in the request body are required.
+    ///
+    /// **NOTE:** Title must be unique.
+    /// </remarks>
     /// <response code="400">Input is invalid. Contains validation errors</response>
     /// <response code="201">Contains the ID of the newly created Team</response>
     [HttpPost]
@@ -80,8 +85,11 @@ public class TeamsController : ControllerBase
     }
 
     /// <summary>
-    /// Deletes the Team and all its counters
+    /// Deletes the Team and all its Counters
     /// </summary>
+    /// <remarks>
+    /// **NOTE:** Deleting the Team will also delete all its Counters!
+    /// </remarks>
     /// <param name="id">Id of the Team to delete</param>
     /// <response code="404">Team was not found</response>
     /// <response code="204">Team was successfully deleted</response>
