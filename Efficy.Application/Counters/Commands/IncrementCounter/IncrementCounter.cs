@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Efficy.Application.Common.Interfaces;
 using Efficy.Domain.Exceptions;
+using Microsoft.EntityFrameworkCore;
 
 namespace Efficy.Application.Counters.Commands.IncrementCounter
 {
@@ -22,15 +23,20 @@ namespace Efficy.Application.Counters.Commands.IncrementCounter
 
         public async Task<int> Handle(IncrementCounterCommand request, CancellationToken cancellationToken)
         {
-            var entity = await _dbContext.Counters.FindAsync(request.CounterId, cancellationToken);
-            if (entity == null)
+            await _dbContext.Counters
+                .Where(x => x.Id == request.CounterId)
+                .ExecuteUpdateAsync(s => 
+                    s.SetProperty(c => c.Value, c => c.Value + request.IncrementValue), 
+                    cancellationToken);
+
+            var counterValue = await _dbContext.Counters
+                .Where(x => x.Id == request.CounterId)
+                .Select(x => new { Value = x.Value })
+                .SingleOrDefaultAsync(cancellationToken);
+            if (counterValue == null)
                 throw new NotFoundException(request.CounterId.ToString());
 
-            entity.Value += request.IncrementValue;
-
-            await _dbContext.SaveChangesAsync(cancellationToken);
-
-            return entity.Value;
+            return counterValue.Value;
         }
     }
 }
