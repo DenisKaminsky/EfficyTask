@@ -26,9 +26,9 @@ public class TeamsController : ControllerBase
     /// <response code="200">Contains List of Teams</response>
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<TeamDto>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetAllTeams()
+    public async Task<IActionResult> GetAllTeams(CancellationToken cancellationToken)
     {
-        var teams = await _sender.Send(new GetAllTeamsQuery());
+        var teams = await _sender.Send(new GetAllTeamsQuery(), cancellationToken);
         return Ok(teams);
     }
 

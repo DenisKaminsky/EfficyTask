@@ -27,6 +27,10 @@ namespace EfficyTask.Web.Settings
             {
                 await _customExceptionHandlers[exceptionType].Invoke(httpContext, exception);
             }
+            else if (exception is OperationCanceledException or TaskCanceledException)
+            {
+                await HandleOperationCancelledException(httpContext);
+            }
             else
             {
                 await HandleGlobalInternalException(httpContext, exception);
@@ -60,6 +64,18 @@ namespace EfficyTask.Web.Settings
                 Type = "https://tools.ietf.org/html/rfc7231#section-6.5.4",
                 Title = "The specified resource was not found.",
                 Detail = exception.Message
+            });
+        }
+
+        private async Task HandleOperationCancelledException(HttpContext httpContext)
+        {
+            httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+
+            await httpContext.Response.WriteAsJsonAsync(new ProblemDetails()
+            {
+                Status = StatusCodes.Status400BadRequest,
+                Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+                Title = "Operation was cancelled."
             });
         }
 

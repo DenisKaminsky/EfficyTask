@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Efficy.Application.Common.Behaviors;
 
-public class UnhandledExceptionBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+public class UnhandledExceptionBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
 {
     private readonly ILogger<TRequest> _logger;
 
@@ -17,6 +17,11 @@ public class UnhandledExceptionBehaviour<TRequest, TResponse> : IPipelineBehavio
         try
         {
             return await next();
+        }
+        catch (OperationCanceledException)
+        {
+            _logger.LogInformation("Operation was cancelled");
+            throw;
         }
         catch (Exception ex)
         {
